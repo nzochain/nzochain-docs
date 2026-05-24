@@ -1,0 +1,46 @@
+---
+title: Manage Approvals
+description: Liste e gerencie aprovacoes de tokens para reduzir exposicao a infinite approvals.
+---
+
+# Manage Approvals
+
+Mesmo em uma arquitetura de prevencao proativa, o gerenciamento de aprovacoes continua sendo uma camada importante de higiene operacional.
+
+Use `client.approvals.list()` para inspecionar aprovacoes ativas e identificar exposicao desnecessaria a spenders com permissao excessiva.
+
+## Exemplo
+
+```ts
+import { NzochainClient } from "@nzochain/sdk";
+
+const client = new NzochainClient({
+  apiKey: process.env.NZOCHAIN_API_KEY!,
+  environment: "production"
+});
+
+async function listApprovals() {
+  const approvals = await client.approvals.list({
+    walletAddress: "0x8ba1f109551bD432803012645Ac136ddd64DBA72",
+    chainId: 1
+  });
+
+  for (const approval of approvals.items) {
+    console.log({
+      token: approval.tokenSymbol,
+      spender: approval.spender,
+      allowance: approval.allowance,
+      infinite: approval.isInfinite
+    });
+  }
+}
+
+listApprovals().catch(console.error);
+```
+
+## Quando usar
+
+- auditoria de carteiras corporativas;
+- dashboards de risco para usuarios finais;
+- rotinas de monitoramento de allowances em dApps DeFi;
+- fluxos de remediacao apos deteccao de alto risco.

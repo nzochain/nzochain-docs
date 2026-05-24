@@ -1,0 +1,88 @@
+---
+title: Quickstart
+description: Instale o SDK da Nzochain e inicialize o cliente em um projeto TypeScript.
+---
+
+# Quickstart
+
+Este guia mostra como instalar o SDK ficticio `@nzochain/sdk` e inicializar um cliente pronto para analise de risco em tempo real.
+
+## Requisitos
+
+- Node.js 18+
+- TypeScript 5+
+- Uma API Key da Nzochain
+
+## Instalacao
+
+Escolha seu gerenciador de pacotes:
+
+```bash
+npm install @nzochain/sdk
+```
+
+```bash
+yarn add @nzochain/sdk
+```
+
+## Configure sua API Key
+
+Armazene a chave em uma variavel de ambiente:
+
+```bash
+export NZOCHAIN_API_KEY="nzo_test_your_api_key"
+```
+
+Em projetos Next.js, voce tambem pode definir a chave em um arquivo `.env.local`:
+
+```bash
+NZOCHAIN_API_KEY=nzo_test_your_api_key
+```
+
+## Inicializando o cliente
+
+```ts
+import { NzochainClient } from "@nzochain/sdk";
+
+const apiKey = process.env.NZOCHAIN_API_KEY;
+
+if (!apiKey) {
+  throw new Error("Missing NZOCHAIN_API_KEY environment variable.");
+}
+
+export const nzochain = new NzochainClient({
+  apiKey,
+  environment: "production",
+  timeout: 10_000
+});
+```
+
+## Exemplo em TypeScript
+
+Use o cliente em um servico, action ou endpoint do seu backend:
+
+```ts
+import { NzochainClient } from "@nzochain/sdk";
+
+async function bootstrap() {
+  const client = new NzochainClient({
+    apiKey: process.env.NZOCHAIN_API_KEY!,
+    environment: "production"
+  });
+
+  const health = await client.health.check();
+
+  console.log("Nzochain API status:", health.status);
+}
+
+bootstrap().catch((error) => {
+  console.error("Failed to initialize Nzochain client:", error);
+  process.exit(1);
+});
+```
+
+## Proximo passo
+
+Depois da inicializacao, o fluxo mais comum e analisar uma transacao antes da assinatura para decidir se a UX deve permitir, alertar ou bloquear a operacao.
+
+Continue em **Analyze Transaction**.

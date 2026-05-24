@@ -1,0 +1,107 @@
+---
+title: Analyze Transaction
+description: Analise uma transacao antes da assinatura e receba um nivel de risco em tempo real.
+---
+
+# Analyze Transaction
+
+Use `client.transactions.analyze()` para avaliar uma interacao antes que ela seja assinada e propagada para a blockchain.
+
+Esse endpoint e util quando sua aplicacao precisa validar:
+
+- a carteira de origem;
+- o contrato de destino;
+- o risco de permissao excessiva;
+- sinais de comportamento malicioso antes da confirmacao.
+
+## Exemplo
+
+```ts
+import { NzochainClient } from "@nzochain/sdk";
+
+const client = new NzochainClient({
+  apiKey: process.env.NZOCHAIN_API_KEY!,
+  environment: "production"
+});
+
+async function analyzeTransaction() {
+  const result = await client.transactions.analyze({
+    walletAddress: "0x8ba1f109551bD432803012645Ac136ddd64DBA72",
+    contractAddress: "0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    chainId: 1
+  });
+
+  console.log(result.riskLevel);
+
+  if (result.riskLevel === "CRITICAL") {
+    console.error("Block signature: malicious contract or unsafe approval detected.");
+    return;
+  }
+
+  if (result.riskLevel === "HIGH") {
+    console.warn("Require explicit user confirmation before proceeding.");
+    return;
+  }
+
+  console.log("Transaction can proceed with normal UX safeguards.");
+}
+
+analyzeTransaction().catch(console.error);
+```
+
+## Parametros
+
+```ts
+type AnalyzeTransactionInput = {
+  walletAddress: string;
+  contractAddress: string;
+  chainId: number;
+};
+```
+
+| Campo | Tipo | Obrigatorio | Descricao |
+| --- | --- | --- | --- |
+| `walletAddress` | `string` | Sim | Endereco da carteira que iniciara a interacao. |
+| `contractAddress` | `string` | Sim | Endereco do contrato que recebera a chamada. |
+| `chainId` | `number` | Sim | Identificador EVM da rede alvo. |
+
+## Resposta
+
+```ts
+type AnalyzeTransactionResponse = {
+  riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  reasons: string[];
+  approvalDetected: boolean;
+  simulationId: string;
+};
+```
+
+### Exemplo de retorno
+
+```json
+{
+  "riskLevel": "HIGH",
+  "reasons": [
+    "Contract has a suspicious approval pattern.",
+    "Requested allowance exceeds common operational thresholds."
+  ],
+  "approvalDetected": true,
+  "simulationId": "sim_01jz4v1nzochain"
+}
+```
+
+## Semantica do `riskLevel`
+
+- `LOW`: nao foram encontrados sinais materiais de risco no contexto analisado.
+- `MEDIUM`: existe anomalia ou risco contextual que merece alerta de interface.
+- `HIGH`: a transacao apresenta sinais relevantes de abuso, permissao excessiva ou contrato suspeito.
+- `CRITICAL`: a operacao deve ser bloqueada imediatamente pelo produto integrador.
+
+## Recomendacao de integracao
+
+Em produtos Web3 com UX transacional, o padrao recomendado e usar o `riskLevel` como gate de decisao:
+
+- permitir automaticamente quando `LOW`;
+- exibir aviso reforcado quando `MEDIUM`;
+- exigir confirmacao adicional quando `HIGH`;
+- bloquear a assinatura quando `CRITICAL`.
