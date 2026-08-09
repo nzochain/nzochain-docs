@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" fill="none" role="img" aria-label="NZOChain">
+  <g>
+    <path d="M32 4 L54 17 L54 43 L32 56 L10 43 L10 17 Z" stroke="#00FF88" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M20 44 V20 L44 44 V20" stroke="#00FF88" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="20" cy="20" r="3" fill="#060816" stroke="#00FF88" stroke-width="2"/>
+    <circle cx="44" cy="44" r="3" fill="#060816" stroke="#00FF88" stroke-width="2"/>
+    <circle cx="20" cy="44" r="3" fill="#060816" stroke="#00FF88" stroke-width="2"/>
+    <circle cx="44" cy="20" r="3" fill="#060816" stroke="#00FF88" stroke-width="2"/>
+  </g>
+  <text x="72" y="42" font-family="'Space Grotesk', 'Segoe UI', system-ui, sans-serif" font-size="28" font-weight="700" letter-spacing="0.5">
+    <tspan fill="#FFFFFF">NZO</tspan><tspan fill="#00FF88">Chain</tspan>
+  </text>
+</svg>

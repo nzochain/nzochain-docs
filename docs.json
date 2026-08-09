@@ -4,9 +4,14 @@
   "name": "Nzochain Docs",
   "description": "Documentacao oficial da Nzochain, plataforma de seguranca Web3 proativa para prevencao de transacoes maliciosas e infinite approvals.",
   "colors": {
-    "primary": "#0072ff",
+    "primary": "#00FF88",
     "light": "#66a8ff",
     "dark": "#0057c2"
+  },
+  "favicon": "/favicon.png",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
   },
   "appearance": {
     "default": "dark",
@@ -16,7 +21,7 @@
     "decoration": "gradient",
     "color": {
       "light": "#F8FAFC",
-      "dark": "#081120"
+      "dark": "#060816"
     }
   },
   "styling": {
